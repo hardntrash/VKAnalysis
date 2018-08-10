@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from TargetADS import data_api as dapi
-from TargetADS import IOFile as IO
-import os
+import data_api as dapi
+
 
 def getGroupsUser(user_id):
     try:
