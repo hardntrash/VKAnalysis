@@ -2,10 +2,11 @@
 
 import codecs
 import pymorphy2
-import VK
-import data_api as dapi
-import IOFile as IO
 import operator
+
+from TargetADS import IOFile as IO
+from TargetADS import data_api as dapi
+from TargetADS import VK
 
 morph = pymorphy2.MorphAnalyzer()
 
