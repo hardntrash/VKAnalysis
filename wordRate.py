@@ -120,39 +120,73 @@ def topWords(rate, top):
 	return new_rate
 
 
-# 			ТЕСТИРОВАНИЕ
+# # 			ТЕСТИРОВАНИЕ
+#
+# wordRate = {}
+# buffRate = {} # временный рейтинг слов
+#
+# # чистим директории от файлов
+# IO.clearDir("files/output")
+#
+#
+# id_list = IO.getFromFile('input/static.txt', 1)
+# if (id_list != 1):
+#
+# 	for user_id in id_list:
+# 		print("Анализируем пользователя: ", str(user_id))
+#
+# 		# для каждого текущего человека запрашиваем лист его групп
+# 		user_groups = VK.getGroupsUser(user_id)
+#
+# 		if (user_groups != 1):
+# 			post_list = VK.getPost(user_groups, 'groups')
+# 			# у каждой группы достаем посты
+# 			for group in post_list:
+# 				for post in group:
+# 					text = post['text']
+# 					# сохраненные посты добавляем в рейтинг слов
+# 					text2rate(text, buffRate)
+#
+# 					# делим на кол-во слов в посте
+# 					for i in buffRate:
+# 						buffRate[i] /= len(buffRate)
+#
+# 					addRate(buffRate, wordRate)
+# 					buffRate = {}
+#
+# 		# делим на количство групп, чтобы те, у кого их больше, не имели высшие оценки из-за больших соответствий слов
+# 		for key in wordRate:
+# 			wordRate[key] /= len(user_groups)
+#
+# 		wordRate = sortRate(wordRate)
+# 		# сохраняем словесную характеристику
+# 		saveRate('files/output/' + str(user_id) + ".txt", topWords(wordRate, 100))
 
-wordRate = {}
-buffRate = {} # временный рейтинг слов
-
-# чистим директории от файлов
-IO.clearDir("files/output")
 
 
-id_list = IO.getFromFile('input/static.txt', 1)
-if (id_list != 1):
 
-	for user_id in id_list:
-		print("Анализируем пользователя: ", str(user_id))
+def wordRateFlask(user_id):
+	wordRate ={}
+	buffRate = {}
 
-		# для каждого текущего человека запрашиваем лист его групп
-		user_groups = VK.getGroupsUser(user_id)
+	# для каждого текущего человека запрашиваем лист его групп
+	user_groups = VK.getGroupsUser(user_id)
 
-		if (user_groups != 1):
-			post_list = VK.getPost(user_groups, 'groups')
-			# у каждой группы достаем посты
-			for group in post_list:
-				for post in group:
-					text = post['text']
-					# сохраненные посты добавляем в рейтинг слов
-					text2rate(text, buffRate)
+	if (user_groups != 1):
+		post_list = VK.getPost(user_groups, 'groups')
+		# у каждой группы достаем посты
+		for group in post_list:
+			for post in group:
+				text = post['text']
+				# сохраненные посты добавляем в рейтинг слов
+				text2rate(text, buffRate)
 
-					# делим на кол-во слов в посте
-					for i in buffRate:
-						buffRate[i] /= len(buffRate)
+				# делим на кол-во слов в посте
+				for i in buffRate:
+					buffRate[i] /= len(buffRate)
 
-					addRate(buffRate, wordRate)
-					buffRate = {}
+				addRate(buffRate, wordRate)
+				buffRate = {}
 
 		# делим на количство групп, чтобы те, у кого их больше, не имели высшие оценки из-за больших соответствий слов
 		for key in wordRate:
@@ -160,6 +194,4 @@ if (id_list != 1):
 
 		wordRate = sortRate(wordRate)
 		# сохраняем словесную характеристику
-		saveRate('files/output/' + str(user_id) + ".txt", topWords(wordRate, 100))
-
-		wordRate = {}
+		return topWords(wordRate, 100)
