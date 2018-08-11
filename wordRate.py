@@ -194,3 +194,4 @@ def wordRateFlask(user_id):
 		wordRate = sortRate(wordRate)
 		# сохраняем словесную характеристику
 		return topWords(wordRate, 100)
+
