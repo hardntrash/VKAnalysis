@@ -1,12 +1,15 @@
 # VKAnalysis
 воооооооооот
 
+## Установить зависимости командой:
 
-Установить зависимости командой:
+```
+pip install -r requirements.txt 
+```
 
- pip install -r requirements.txt 
- 
-Запустить сервер:
+## Запустить сервер: 
 
+
+```
   python hello.py runserver
-  
+```
