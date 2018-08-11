@@ -30,6 +30,7 @@ def getFromFile(fileDir, mode):
             return text
             
 
+
 def clearDir(path):
     list_dir = os.listdir(path)
 
