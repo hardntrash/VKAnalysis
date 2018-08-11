@@ -163,8 +163,7 @@ def topWords(rate, top):
 # 		saveRate('files/output/' + str(user_id) + ".txt", topWords(wordRate, 100))
 
 
-
-
+# функция возврата ретинга слов
 def wordRateFlask(user_id):
 	wordRate ={}
 	buffRate = {}
