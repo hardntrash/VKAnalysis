@@ -46,3 +46,8 @@ def getPost(ids, mode):
             list_posts.append(response.json()['response']['items'])
             counter += 1
     return list_posts
+
+def getUserId(user_id):
+    params = {'v' : '5.80', "access_token" : dapi.token, 'user_ids' : user_id}
+    response = requests("https://api.vk.com/method/users.get", params)
+    return response.json()["response"][0]['id']

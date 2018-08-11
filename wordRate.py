@@ -195,3 +195,7 @@ def wordRateFlask(user_id):
 		# сохраняем словесную характеристику
 		return topWords(wordRate, 100)
 
+# Поиск цифрового ID
+def searchUser(user_id):
+    if not user_id.isdigit():
+		user_id = VK.getUserId(user_id)
