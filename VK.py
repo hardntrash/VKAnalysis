@@ -3,7 +3,6 @@
 import requests
 import data_api as dapi
 
-
 def getGroupsUser(user_id):
     try:
         params = {'user_id' : user_id, 'v' : '5.73', 'access_token' : dapi.token, 'count': 20}
@@ -48,6 +47,9 @@ def getPost(ids, mode):
     return list_posts
 
 def getUserId(user_id):
-    params = {'v' : '5.80', "access_token" : dapi.token, 'user_ids' : user_id}
-    response = requests("https://api.vk.com/method/users.get", params)
+    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id}
+    response = requests.get("https://api.vk.com/method/users.get", params)
     return response.json()["response"][0]['id']
+
+def getUserInfo():
+    pass
