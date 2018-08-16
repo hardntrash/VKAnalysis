@@ -162,11 +162,19 @@ def topWords(rate, top):
 # 		# сохраняем словесную характеристику
 # 		saveRate('files/output/' + str(user_id) + ".txt", topWords(wordRate, 100))
 
+# Поиск цифрового ID
+def searchUser(user_id):
+    if not user_id.isdigit():
+		user_id = VK.getUserId(user_id)
+	
+	return user_id
 
 # функция возврата ретинга слов
 def wordRateFlask(user_id):
 	wordRate ={}
 	buffRate = {}
+	
+	user_id = searchUser(user_id)
 
 	# для каждого текущего человека запрашиваем лист его групп
 	user_groups = VK.getGroupsUser(user_id)
