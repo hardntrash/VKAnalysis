@@ -164,7 +164,7 @@ def topWords(rate, top):
 
 # Поиск цифрового ID
 def searchUser(user_id):
-    if not user_id.isdigit():
+	if not user_id.isdigit():
 		user_id = VK.getUserId(user_id)
 	
 	return user_id
