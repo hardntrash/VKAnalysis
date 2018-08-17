@@ -26,7 +26,7 @@ def getFriendsUser(user_id):
         Принимается числовой ID.
         Возвращается список ID друзей.
     """
-    
+
     try:
         params = {'user_id' : user_id, 'v' : '5.73', 'access_token' : dapi.token}
         response = requests.get("https://api.vk.com/method/friends.get", params)
@@ -95,5 +95,21 @@ def getUserInfo(user_id, setfields:tuple=('city',)):
     params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id, 'fields' : fields}
     response = requests.get("https://api.vk.com/method/users.get", params).json()['response'][0]
     response = {k : v for k, v in response.items() if k in setfields}
+
+    return response
+
+
+def getPostInfo(ids, post_id):
+    """Функция для получения информация о посте.
+        Принимает:
+            :ids: числовой ID группы или пользователя;
+            :post_id: числовой ID поста.
+        Возвращает список постов с их описанием.
+    """
+
+    params = {  'type' : 'post', 'owner_id' : ids, 'item_id' : post_id, 
+                'filter' : 'likes', 'friends_only' : 0, 'extended' : 1,
+                'offset' : 0, 'count' : 200, 'skip_own' : 1, 'v' : '5.80', 'access_token' : dapi.token}
+    response = requests.get('https://api.vk.com/method/likes.getList', params).json()['response']
 
     return response
