@@ -52,4 +52,5 @@ def getUserId(user_id):
     return response.json()["response"][0]['id']
 
 def getUserInfo():
-    pass
+    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id}
+    response = requests.get("https://api.vk.com/method/users.get", params)
