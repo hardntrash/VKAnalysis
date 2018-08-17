@@ -99,12 +99,12 @@ def getUserInfo(user_id, setfields:tuple=('city',)):
     return response
 
 
-def getPostInfo(ids, post_id):
-    """Функция для получения информация о посте.
+def getLikePost(ids, post_id):
+    """Функция для получения лайков поста.
         Принимает:
             :ids: числовой ID группы или пользователя;
             :post_id: числовой ID поста.
-        Возвращает список постов с их описанием.
+        Возвращает список лайкнувших.
     """
 
     params = {  'type' : 'post', 'owner_id' : ids, 'item_id' : post_id, 
