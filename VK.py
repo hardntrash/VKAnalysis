@@ -51,6 +51,18 @@ def getUserId(user_id):
     response = requests.get("https://api.vk.com/method/users.get", params)
     return response.json()["response"][0]['id']
 
-def getUserInfo():
-    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id}
-    response = requests.get("https://api.vk.com/method/users.get", params)
+def getUserInfo(user_id, setfields:tuple=('city',)):
+    """Функция для получения информации о аользователе.
+    Принимаемые параметры:
+        :user_id: индификатор пользователя (числовой или короткое имя);
+        :fields: параметры, которые необходимо получить (Передвать кортеж!). По умолчанию только 'city'.
+    Возвращает json-структуру со значениями переданных параметров.
+    Пример:
+        :запрос: getUserInfo('parametist', ('city', 'home_town'));
+        :ответ: {'city': {'id': 147, 'title': 'Тюмень'}, 'home_town': 'Тюмень'}.
+        """
+    fields = ''.join([i+',' for i in setfields])[:-1]
+    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id, 'fields' : fields}
+    response = requests.get("https://api.vk.com/method/users.get", params).json()['response'][0]
+    response = {k : v for k, v in response.items() if k in setfields}
+    return response
