@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from geocoder import google as coords
+from geocoder import yandex as coords
 
 from VK import getLikePost
 from VK import getUserInfo
@@ -15,26 +15,24 @@ def counterLike(ids, post_id):
     """
 
     listId = [i['id'] for i in getLikePost(ids, post_id)['items']]
-    
+
     cityes = {}
 
     for i in listId:
         city = getUserInfo(i)
-        print('City', city)
         if city != {}:
             city = city['city']['title']
         else:
             continue
         if city not in cityes.keys():
             crds = coords(city).latlng
-            print('Coords', crds)
             if crds == None:
                 continue
             cityes.update({
-                city : {
-                    'like_count' : 1,
-                    'latitude' : crds[0],
-                    'longitude' : crds[1]
+                city: {
+                    'like_count': 1,
+                    'latitude': crds[0],
+                    'longitude': crds[1]
                 }
             })
         else:
