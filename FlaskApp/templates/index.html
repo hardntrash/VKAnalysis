@@ -5,11 +5,23 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/result" method="post">
-    {{ form.csrf_token }}
-    <p>Введи id</p>
-    <p>{{ form.vk_id }}</p>
-    <p>{{ form.submit }}</p>
+<div align="left">
+    <form action="/result" method="post">
+        {{ form.csrf_token }}
+        <p>Введи id</p>
+        <p>{{ form.vk_id }}</p>
+        <p>{{ form.submit }}</p>
+    </form>
+</div>
+<div align="right">
+    <form action="/map_likes" method="POST">
+        {{ form.csrf_token }}
+        <p>Введи id группы или человека</p>
+        <p>{{ form_map.id }}</p>
+        <p> Введи id поста</p>
+        <p>{{ form_map.id_post }}</p>
+        <p>{{ form_map.submit }}</p>
 </form>
+</div>
 </body>
 </html>
