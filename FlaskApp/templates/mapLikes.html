@@ -16,7 +16,8 @@
     // Создаем массив с данными.
         myPoints = [];
             {%  for x in coord %}
-                myPoints.push({ coords: [{{ x['l'] }}, {{ x['w'] }}] })
+                myPoints.push({ coords: [{{ coord[x]['latitude'] }}, {{ coord[x]['longitude'] }}],
+                    text: 'Лайки: ' + {{ coord[x]['like_count'] }}})
             {% endfor %}
 
     // Заполняем коллекцию данными.
@@ -121,12 +122,5 @@ ymaps.ready(init);
 </head>
 <body>
     <div id="map"></div>
-{#{% for x in coord %}#}
-{#    {{ x['l'] }}#}
-{#    {{ x['w'] }}<br>#}
-{#{% endfor %}#}
-{#{%  for x in coord %}#}
-{#                { coords: [{{ x['1'] }}, {{ x['w'] }}], text: 'Тест' },#}
-{#{% endfor %}#}
 </body>
 </html>

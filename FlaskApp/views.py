@@ -22,7 +22,5 @@ def result_view():
 
 @app.route('/map_likes', methods=['POST'])
 def map_likes_view():
-    # cities = counterLike(request.form['id'], request.form['id_post'])
-    # cities = counterLike(168948199, getPost([168948199])[0][0]['id'])
-    return render_template('mapLikes.html', coord=[{'l': 51, 'w': 52}, {'l': 55, 'w': 57}])
-# , ct=cities
+    cities = counterLike(request.form['vk_id'], getPost([request.form['vk_id']])[0][0]['id'])
+    return render_template('mapLikes.html', coord=cities)

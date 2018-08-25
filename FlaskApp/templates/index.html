@@ -17,9 +17,7 @@
     <form action="/map_likes" method="POST">
         {{ form.csrf_token }}
         <p>Введи id группы или человека</p>
-        <p>{{ form_map.id }}</p>
-        <p> Введи id поста</p>
-        <p>{{ form_map.id_post }}</p>
+        <p>{{ form_map.vk_id }}</p>
         <p>{{ form_map.submit }}</p>
 </form>
 </div>
