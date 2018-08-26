@@ -12,7 +12,7 @@ def getGroupsUser(user_id):
     """
 
     try:
-        params = {'user_id' : user_id, 'v' : '5.73', 'access_token' : dapi.token, 'count': 20}
+        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.token, 'count': 20}
         response = requests.get("https://api.vk.com/method/groups.get", params)
 
         return response.json()['response']['items']
@@ -28,7 +28,7 @@ def getFriendsUser(user_id):
     """
 
     try:
-        params = {'user_id' : user_id, 'v' : '5.73', 'access_token' : dapi.token}
+        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.token}
         response = requests.get("https://api.vk.com/method/friends.get", params)
 
         return response.json()['response']['items']
@@ -37,22 +37,30 @@ def getFriendsUser(user_id):
         return 1
 
 
-def getPost(ids:list, mode='users'):
+def getPost(ids, mode='user'):
     """Функция для получения постов группы или пользователя в зависимости от режима (mode).
         Параметры:
-            :ids: Список ID пользователей или групп (Числовой ID);
-            :mode: Режим 'groups' или 'users'. По умолчанию 'users'.
+            :ids: Список или одиночный ID пользователей или групп.;
+            :mode: Режим 'group' или 'users'. По умолчанию 'user'.
     """
+
+    if type(ids) != list:
+        ids = [ids]
+    
+    for i in range(len(ids)):
+        if not ids[i].isdigit():
+            ids[i] = getId(ids[i], mode=mode)
 
     list_posts = []
     counter = 0
     count = 50
     while counter < len(ids):
-        if mode == "groups":
-            ids[counter] = -ids[counter]
+        if mode == "group":
+            #ids[counter] = -ids[counter]
             count = 100
 
-        params = {'v' : '5.73', "access_token" : dapi.token, 'owner_id' : ids[counter], 'count' : count, "offset" : 0}
+        params = {'v': '5.73', "access_token": dapi.token,
+                  'owner_id': ids[counter], 'count': count, "offset": 0}
         try:
             response = requests.get("https://api.vk.com/method/wall.get", params)
             if "error" in response.json():
@@ -67,20 +75,29 @@ def getPost(ids:list, mode='users'):
             list_posts.append(response.json()['response']['items'])
             counter += 1
 
-    return list_posts
+    return list_posts[0]
 
 
-def getUserId(user_id):
-    """Функция для получения цифрового ID пользователя.
+def getId(ids, mode='user'):
+    """Функция для получения цифрового ID пользователя или группы.
+    Принимаемые параметры:
+        :ids: короткое имя пользователя или группы
+        :mode: для чего искать ID: пользователя или группы ('user', 'group').
+        По умолчанию поиск осуществляется для 'user'.
     """
 
-    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id}
-    response = requests.get("https://api.vk.com/method/users.get", params)
+    if mode == 'user':
+        params = {'v': '5.73', "access_token": dapi.token, 'user_ids': ids}
+        response = requests.get("https://api.vk.com/method/users.get", params)
 
-    return response.json()["response"][0]['id']
+        return response.json()['response'][0]['id']
+    elif mode == 'group':
+        params = {'v': '5.80', "access_token": dapi.token, 'group_ids': ids}
+        response = requests.get("https://api.vk.com/method/groups.getById", params)
+        return '-' + str(response.json()['response'][0]['id'])
 
 
-def getUserInfo(user_id, setfields:tuple=('city',)):
+def getUserInfo(user_id, setfields: tuple=('city',)):
     """Функция для получения информации о пользователе.
     Принимаемые параметры:
         :user_id: индификатор пользователя (числовой или короткое имя);
@@ -92,9 +109,9 @@ def getUserInfo(user_id, setfields:tuple=('city',)):
     """
 
     fields = ''.join([i+',' for i in setfields])[:-1]
-    params = {'v' : '5.73', "access_token" : dapi.token, 'user_ids' : user_id, 'fields' : fields}
+    params = {'v': '5.73', "access_token": dapi.token, 'user_ids': user_id, 'fields': fields}
     response = requests.get("https://api.vk.com/method/users.get", params).json()['response'][0]
-    response = {k : v for k, v in response.items() if k in setfields}
+    response = {k: v for k, v in response.items() if k in setfields}
 
     return response
 
@@ -107,9 +124,9 @@ def getLikePost(ids, post_id):
         Возвращает список лайкнувших.
     """
 
-    params = {  'type' : 'post', 'owner_id' : ids, 'item_id' : post_id, 
-                'filter' : 'likes', 'friends_only' : 0, 'extended' : 1,
-                'offset' : 0, 'count' : 200, 'skip_own' : 1, 'v' : '5.80', 'access_token' : dapi.token}
+    params = {'type': 'post', 'owner_id': ids, 'item_id': post_id,
+              'filter': 'likes', 'friends_only': 0, 'extended': 1,
+              'offset': 0, 'count': 200, 'skip_own': 0, 'v': '5.80', 'access_token': dapi.token}
     response = requests.get('https://api.vk.com/method/likes.getList', params).json()['response']
 
     return response
