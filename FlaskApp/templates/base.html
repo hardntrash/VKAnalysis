@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	{% block css %}
-	<link rel="stylesheet" type="text/css" href="base_style.css">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base_style.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	{% endblock %}
 	
 	<title>
@@ -15,13 +16,17 @@
 </head>
 <body>
 	<nav class="menu">
-		<a class="menu__item">Все методы</a>
-		<a class="menu__item">Войти</a>
+		<a href="#" class="menu__item">Все методы</a>
+		<a href="#" class="menu__item">Войти</a>
 	</nav>
 
 	<section class="container">
 		{% block content %}
 		{% endblock %}
+	</section>
+
+	<section class="footer">
+		Privet
 	</section>
 </body>
 </html>

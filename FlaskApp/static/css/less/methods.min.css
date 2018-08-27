@@ -1,0 +1,1 @@
+.method-list{display:flex;flex-direction:column}.method-list__item{display:flex;flex-direction:column;margin-bottom:32px;padding:16px;background-color:#ccc}.method-list__item__disc{margin-bottom:16px}.method-list__item__content{display:flex;flex-direction:row}.input-line{display:flex;flex-direction:column}
