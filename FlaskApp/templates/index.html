@@ -1,25 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div align="left">
-    <form action="/result" method="post">
-        {{ form.csrf_token }}
-        <p>Введи id</p>
-        <p>{{ form.vk_id }}</p>
-        <p>{{ form.submit }}</p>
-    </form>
-</div>
-<div align="right">
-    <form action="/map_likes" method="POST">
-        {{ form.csrf_token }}
-        <p>Введи id группы или человека</p>
-        <p>{{ form_map.vk_id }}</p>
-        <p>{{ form_map.submit }}</p>
-</form>
-</div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="methods.css">
+{% endblock %}
+
+{% block content %}
+<div class="method-list">
+    <div class="method-list__item">
+        <form action="/result" method="post">
+            {{ form.csrf_token }}
+            <p>Введи id</p>
+            <p>{{ form.vk_id }}</p>
+            <p>{{ form.submit }}</p>
+        </form>
+    </div>
+
+    <div class="method-list__item">
+        <form action="/map_likes" method="POST">
+            {{ form.csrf_token }}
+            <p>Введи id группы или человека</p>
+            <p>{{ form_map.vk_id }}</p>
+            <p>{{ form_map.submit }}</p>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "index.html" %}
+
+{% block content %}
+
 <ul>
 {% for x in dict %}
     <li>{{ x }}</li>
 {% endfor %}
 </ul>
-</body>
-</html>
+
+{% endblock %}
