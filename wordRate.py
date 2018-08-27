@@ -171,7 +171,7 @@ def topWords(rate, top):
 # Поиск цифрового ID
 def searchUser(user_id):
     if not user_id.isdigit():
-        user_id = VK.getUserId(user_id)
+        user_id = VK.getId(user_id)
 
     return user_id
 
@@ -187,20 +187,24 @@ def wordRateFlask(user_id):
     user_groups = VK.getGroupsUser(user_id)
 
     if (user_groups != 1):
-        post_list = VK.getPost(user_groups, 'groups')
+        user_groups = [str(cur_group) for cur_group in user_groups]
+        post_list = VK.getPost(user_groups, 'group')
+        # print(post_list)
         # у каждой группы достаем посты
         for group in post_list:
-            for post in group:
-                text = post['text']
-                # сохраненные посты добавляем в рейтинг слов
-                text2rate(text, buffRate)
+            print(group)
+            # for post in group:
+            #     print(post.__str__())
+            text = group['text']
+            # сохраненные посты добавляем в рейтинг слов
+            text2rate(text, buffRate)
 
-                # делим на кол-во слов в посте
-                for i in buffRate:
-                    buffRate[i] /= len(buffRate)
+            # делим на кол-во слов в посте
+            for i in buffRate:
+                buffRate[i] /= len(buffRate)
 
-                addRate(buffRate, wordRate)
-                buffRate = {}
+            addRate(buffRate, wordRate)
+            buffRate = {}
 
         # делим на количство групп, чтобы те, у кого их больше, не имели высшие оценки из-за больших соответствий слов
         for key in wordRate:
