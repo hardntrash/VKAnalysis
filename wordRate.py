@@ -196,7 +196,7 @@ def wordRateFlask(user_id):
 # >>>>>>> d77ed20aa38f9ba26df902fc3ede53ffd3bb9cc0
         # у каждой группы достаем посты
         for group in post_list:
-            print(group)
+            # print(group)
             # for post in group:
             #     print(post.__str__())
             text = group['text']

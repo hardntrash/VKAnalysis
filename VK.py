@@ -54,7 +54,7 @@ def getPost(ids, mode='user'):
         if not ids[i].isdigit():
             ids[i] = getId(ids[i], mode=mode)
 
-    print(ids)
+    # print(ids)
 
     list_posts = []
     #counter = 0
