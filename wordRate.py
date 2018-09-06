@@ -171,7 +171,7 @@ def topWords(rate, top):
 # Поиск цифрового ID
 def searchUser(user_id):
     if not user_id.isdigit():
-        user_id = VK.getUserId(user_id)
+        user_id = VK.getId(user_id)
 
     return user_id
 
@@ -187,7 +187,7 @@ def wordRateFlask(user_id):
     user_groups = VK.getGroupsUser(user_id)
 
     if (user_groups != 1):
-        post_list = VK.getPost(user_groups, 'groups')
+        post_list = VK.getPost(user_groups, mode='group')
         # у каждой группы достаем посты
         for group in post_list:
             for post in group:
