@@ -47,6 +47,9 @@ def getPost(ids, mode='user'):
     if type(ids) != list:
         ids = [ids]
 
+    for i in range(len(ids)):
+        ids[i] = str(ids[i])
+
     print(ids)
     
     for i in range(len(ids)):
