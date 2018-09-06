@@ -3,3 +3,4 @@ Jinja2
 pymorphy2
 VK
 geocoder
+flask_wtf
