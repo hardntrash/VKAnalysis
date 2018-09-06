@@ -190,7 +190,7 @@ def wordRateFlask(user_id):
         post_list = VK.getPost(user_groups, mode='group')
 
         user_groups = [str(cur_group) for cur_group in user_groups]
-        post_list = VK.getPost(user_groups, 'group')
+        #post_list = VK.getPost(user_groups, mode='group')
         # print(post_list)
 
         # у каждой группы достаем посты

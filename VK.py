@@ -49,36 +49,38 @@ def getPost(ids, mode='user'):
 
     for i in range(len(ids)):
         ids[i] = str(ids[i])
-
-    print(ids)
     
     for i in range(len(ids)):
         if not ids[i].isdigit():
             ids[i] = getId(ids[i], mode=mode)
 
+    print(ids)
+
     list_posts = []
-    counter = 0
+    #counter = 0
     count = 50
-    while counter < len(ids):
-        if mode == "group":
-            #ids[counter] = -ids[counter]
-            count = 100
+    if mode == "group":
+        for i in range(len(ids)):
+            ids[i] = '-'+ids[i]
+        count = 100
+    #while counter < len(ids):
+    for i in ids:
 
         params = {'v': '5.73', "access_token": dapi.token,
-                  'owner_id': ids[counter], 'count': count, "offset": 0}
+                  'owner_id': i, 'count': count, "offset": 0}
         try:
             response = requests.get("https://api.vk.com/method/wall.get", params)
             if "error" in response.json():
                 if response.json()["error"]["error_code"] == 6:
                     continue
                 else:
-                    counter += 1
+                    #counter += 1
                     continue
         except:
             print("Ошибка")
         else:
             list_posts.append(response.json()['response']['items'])
-            counter += 1
+            #counter += 1
 
     return list_posts[0]
 
