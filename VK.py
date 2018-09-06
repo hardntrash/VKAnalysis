@@ -137,3 +137,4 @@ def getLikePost(ids, post_id):
     response = requests.get('https://api.vk.com/method/likes.getList', params).json()['response']
 
     return response
+
