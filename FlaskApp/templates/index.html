@@ -17,7 +17,6 @@
         <form action="/result" method="post">
             {{ form.csrf_token }}
             <div class="input-line">
-                <label for="vk_id">Введи id</label>
                 <div>{{ form.vk_id }}</div>
                 <div class="button">{{ form.submit }}</div>
             </div>
@@ -32,7 +31,6 @@
         <form action="/map_likes" method="POST">
             {{ form.csrf_token }}
             <div class="input-line">
-                <label for="vk_id">Введи id группы или человека</label>
                 <div>{{ form.vk_id }}</div>
                 <div class="button">{{ form.submit }}</div>
             </div>

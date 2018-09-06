@@ -2,6 +2,7 @@
   padding: 0px;
   margin: 0px;
   font-family: 'Roboto', sans-serif;
+  border: 0px solid transparent;
 }
 .menu {
   display: flex;
@@ -12,14 +13,14 @@
 .menu__item {
   text-decoration: none;
   margin: 0 32px;
-  padding: 24px 24px;
+  padding: 24px;
   color: white;
 }
 .menu__item:hover {
   background-color: #222;
 }
 .container {
-  width: 1024px;
+  width: 800px;
   margin: 32px auto;
   box-sizing: border-box;
 }
@@ -31,7 +32,7 @@
   word-wrap: wrap;
 }
 .heading {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   font-size: 24px;
   font-weight: bold;
 }
