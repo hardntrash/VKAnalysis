@@ -46,6 +46,8 @@ def getPost(ids, mode='user'):
 
     if type(ids) != list:
         ids = [ids]
+
+    print(ids)
     
     for i in range(len(ids)):
         if not ids[i].isdigit():
