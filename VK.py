@@ -37,7 +37,7 @@ def getFriendsUser(user_id):
         return 1
 
 
-def getPost(ids, mode='user'):
+def getPost(ids, mode):
     """Функция для получения постов группы или пользователя в зависимости от режима (mode).
         Параметры:
             :ids: Список или одиночный ID пользователей или групп.;
@@ -49,7 +49,7 @@ def getPost(ids, mode='user'):
 
     for i in range(len(ids)):
         ids[i] = str(ids[i])
-    
+
     for i in range(len(ids)):
         if not ids[i].isdigit():
             ids[i] = getId(ids[i], mode=mode)

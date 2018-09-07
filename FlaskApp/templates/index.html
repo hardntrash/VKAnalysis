@@ -30,6 +30,8 @@
         </div>
         <form action="/map_likes" method="POST">
             {{ form.csrf_token }}
+            <input type="radio" name="mode" value="user" checked>Пользователь</input>
+            <input type="radio" name="mode" value="group">Группа</input>
             <div class="input-line">
                 <div>{{ form.vk_id }}</div>
                 <div class="button">{{ form.submit }}</div>
