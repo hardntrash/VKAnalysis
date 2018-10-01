@@ -11,5 +11,5 @@ pip install -r requirements.txt
 
 
 ```
-  python hello.py runserver
+  python manage.py runserver
 ```
