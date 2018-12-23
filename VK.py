@@ -12,7 +12,7 @@ def getGroupsUser(user_id):
     """
 
     try:
-        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.token, 'count': 20}
+        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.vk.token, 'count': 20}
         response = requests.get("https://api.vk.com/method/groups.get", params)
 
         return response.json()['response']['items']
@@ -28,7 +28,7 @@ def getFriendsUser(user_id):
     """
 
     try:
-        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.token}
+        params = {'user_id': user_id, 'v': '5.73', 'access_token': dapi.vk.token}
         response = requests.get("https://api.vk.com/method/friends.get", params)
 
         return response.json()['response']['items']
@@ -37,7 +37,7 @@ def getFriendsUser(user_id):
         return 1
 
 
-def getPost(ids, mode):
+def getPost(ids, mode='user'):
     """Функция для получения постов группы или пользователя в зависимости от режима (mode).
         Параметры:
             :ids: Список или одиночный ID пользователей или групп.;
@@ -47,42 +47,32 @@ def getPost(ids, mode):
     if type(ids) != list:
         ids = [ids]
 
-    for i in range(len(ids)):
-        ids[i] = str(ids[i])
-
+    ids = list(map(str, ids))
+    
     for i in range(len(ids)):
         if not ids[i].isdigit():
             ids[i] = getId(ids[i], mode=mode)
 
-    # print(ids)
-
     list_posts = []
-    #counter = 0
     count = 50
     if mode == "group":
         for i in range(len(ids)):
             ids[i] = '-'+ids[i]
         count = 100
-    #while counter < len(ids):
-    for i in ids:
 
-        params = {'v': '5.73', "access_token": dapi.token,
-                  'owner_id': i, 'count': count, "offset": 0}
+    for i in ids:
+        params = {'v': '5.73', "access_token": dapi.vk.token,
+                    'owner_id': i, 'count': count}
         try:
-            response = requests.get("https://api.vk.com/method/wall.get", params)
-            if "error" in response.json():
-                if response.json()["error"]["error_code"] == 6:
-                    continue
-                else:
-                    #counter += 1
-                    continue
+            response = requests.get("https://api.vk.com/method/wall.get", params).json()
+            if "error" in response:
+                continue
         except:
             print("Ошибка")
         else:
-            list_posts.append(response.json()['response']['items'])
-            #counter += 1
+            list_posts += response['response']['items']
 
-    return list_posts[0]
+    return list_posts
 
 
 def getId(ids, mode='user'):
@@ -94,12 +84,12 @@ def getId(ids, mode='user'):
     """
 
     if mode == 'user':
-        params = {'v': '5.73', "access_token": dapi.token, 'user_ids': ids}
+        params = {'v': '5.73', "access_token": dapi.vk.token, 'user_ids': ids}
         response = requests.get("https://api.vk.com/method/users.get", params)
 
         return response.json()['response'][0]['id']
     elif mode == 'group':
-        params = {'v': '5.80', "access_token": dapi.token, 'group_ids': ids}
+        params = {'v': '5.80', "access_token": dapi.vk.token, 'group_ids': ids}
         response = requests.get("https://api.vk.com/method/groups.getById", params)
         return '-' + str(response.json()['response'][0]['id'])
 
@@ -116,7 +106,7 @@ def getUserInfo(user_id, setfields: tuple=('city',)):
     """
 
     fields = ''.join([i+',' for i in setfields])[:-1]
-    params = {'v': '5.73', "access_token": dapi.token, 'user_ids': user_id, 'fields': fields}
+    params = {'v': '5.73', "access_token": dapi.vk.token, 'user_ids': user_id, 'fields': fields}
     response = requests.get("https://api.vk.com/method/users.get", params).json()['response'][0]
     response = {k: v for k, v in response.items() if k in setfields}
 
@@ -133,7 +123,7 @@ def getLikePost(ids, post_id):
 
     params = {'type': 'post', 'owner_id': ids, 'item_id': post_id,
               'filter': 'likes', 'friends_only': 0, 'extended': 1,
-              'offset': 0, 'count': 200, 'skip_own': 0, 'v': '5.80', 'access_token': dapi.token}
+              'offset': 0, 'count': 200, 'skip_own': 0, 'v': '5.80', 'access_token': dapi.vk.token}
     response = requests.get('https://api.vk.com/method/likes.getList', params).json()['response']
 
     return response
