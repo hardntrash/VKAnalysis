@@ -4,3 +4,4 @@ pymorphy2
 VK
 geocoder
 flask_wtf
+facebook-sdk
