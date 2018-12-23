@@ -3,7 +3,7 @@ from flask import render_template, request
 
 from VK import getPost
 from .forms import IndexForm, MapLikesForms
-from wordRate import wordRateFlask
+from wordRate import wordRateVK, wordRateFB
 from likeInCity import counterLike
 
 
@@ -17,8 +17,7 @@ def index_view():
 @app.route('/result', methods=['POST'])
 def result_view():
     vk_id = request.form['vk_id']
-    return render_template('result.html', dict=wordRateFlask(vk_id))
-
+    return render_template('result.html', dict=wordRateVK(vk_id))
 
 @app.route('/map_likes', methods=['POST'])
 def map_likes_view():

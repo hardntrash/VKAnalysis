@@ -6,6 +6,8 @@ import operator
 
 import IOFile as IO
 import VK
+import FB
+from math import log
 
 morph = pymorphy2.MorphAnalyzer()
 
@@ -17,7 +19,8 @@ f.close()
 
 
 # функция, добавляющая слова из текста к рейтингу
-def text2rate(text, rate):
+def text2rate(text):
+    rate = {}
     write = False  # записываем ли слово в данный момент
     htag = False
     word = ''
@@ -66,7 +69,7 @@ def text2rate(text, rate):
             elif (i.isupper() or i.islower()):
                 word += i
                 write = True
-    pass
+    return rate
 
 
 # сравнение двух словесных характеристик и выдача коэффициента подобности
@@ -83,10 +86,10 @@ def compareRate(rate1, rate2):
 def addRate(rateFrom, rateTo):
     for key in rateFrom:
         if key in rateTo:
-            rateTo[key] += 1
+            rateTo[key] += rateFrom[key]
         else:
-            rateTo[key] = 1
-    pass
+            rateTo[key] = rateFrom[key]
+
 
 
 def saveRate(fileDir, rate):
@@ -97,8 +100,6 @@ def saveRate(fileDir, rate):
         f.writelines(output)
 
     f.close()
-    pass
-
 
 def loadRate(fileDir):
     f = codecs.open(fileDir, 'r', 'utf-8')
@@ -110,7 +111,6 @@ def loadRate(fileDir):
 
     f.close()
     return rate
-
 
 def sortRate(rate):
     rate = sorted(rate.items(), key=operator.itemgetter(1), reverse=True)
@@ -125,49 +125,6 @@ def topWords(rate, top):
             break
     return new_rate
 
-
-# # 			ТЕСТИРОВАНИЕ
-#
-# wordRate = {}
-# buffRate = {} # временный рейтинг слов
-#
-# # чистим директории от файлов
-# IO.clearDir("files/output")
-#
-#
-# id_list = IO.getFromFile('input/static.txt', 1)
-# if (id_list != 1):
-#
-# 	for user_id in id_list:
-# 		print("Анализируем пользователя: ", str(user_id))
-#
-# 		# для каждого текущего человека запрашиваем лист его групп
-# 		user_groups = VK.getGroupsUser(user_id)
-#
-# 		if (user_groups != 1):
-# 			post_list = VK.getPost(user_groups, 'groups')
-# 			# у каждой группы достаем посты
-# 			for group in post_list:
-# 				for post in group:
-# 					text = post['text']
-# 					# сохраненные посты добавляем в рейтинг слов
-# 					text2rate(text, buffRate)
-#
-# 					# делим на кол-во слов в посте
-# 					for i in buffRate:
-# 						buffRate[i] /= len(buffRate)
-#
-# 					addRate(buffRate, wordRate)
-# 					buffRate = {}
-#
-# 		# делим на количство групп, чтобы те, у кого их больше, не имели высшие оценки из-за больших соответствий слов
-# 		for key in wordRate:
-# 			wordRate[key] /= len(user_groups)
-#
-# 		wordRate = sortRate(wordRate)
-# 		# сохраняем словесную характеристику
-# 		saveRate('files/output/' + str(user_id) + ".txt", topWords(wordRate, 100))
-
 # Поиск цифрового ID
 def searchUser(user_id):
     if not user_id.isdigit():
@@ -175,45 +132,73 @@ def searchUser(user_id):
 
     return user_id
 
+'''
+def wordRate(collection):
+    idf = {}        # сначала для каждого слова храниться кол-во документов, в котором оно встречается
+    terms_doc_matrix = []
 
-# функция возврата ретинга слов
-def wordRateFlask(user_id):
+    # считаем количество входений слов в документ
+    for doc in collection:
+        termFreq = text2rate(doc)
+        terms_doc_matrix.append(termFreq)
+
+        for term in termFreq:
+            if term in idf:
+                idf[term] += 1
+            else:
+                idf[term] = 1
+
+    col_len = len(collection)
+    idf = {k: log(col_len/v) for k, v in idf.items()}
+    wordRate = {k: 0 for k in idf.keys()}
+
+    for doc in terms_doc_matrix:
+        total_terms = sum(doc.values())
+
+        for term, n in doc.items():
+            wordRate[term] += n/total_terms * idf[term]
+
+    wordRate = sortRate(wordRate)
+    return topWords(wordRate, 100)
+'''
+
+def wordRate(collection):
     wordRate = {}
-    buffRate = {}
 
+    # считаем количество входений слов в документ
+    for doc in collection:
+        termFreq = text2rate(doc)
+        total_terms = sum(termFreq.values())
+
+        for term, n in termFreq.items():
+            if term in wordRate:
+                wordRate[term] += n/total_terms
+            else:
+                wordRate[term] = n/total_terms
+
+    wordRate = sortRate(wordRate)
+    return topWords(wordRate, 100)
+
+# функция возврата рейтинга слов
+def wordRateVK(user_id):
     user_id = searchUser(user_id)
 
-    # для каждого текущего человека запрашиваем лист его групп
+    # запрашиваем лист групп
     user_groups = VK.getGroupsUser(user_id)
 
     if (user_groups != 1):
-# <<<<<<< HEAD
         post_list = VK.getPost(user_groups, mode='group')
-# =======
-        user_groups = [str(cur_group) for cur_group in user_groups]
-        #post_list = VK.getPost(user_groups, mode='group')
-        # print(post_list)
-# >>>>>>> d77ed20aa38f9ba26df902fc3ede53ffd3bb9cc0
-        # у каждой группы достаем посты
-        for group in post_list:
-            print(group)
-            # for post in group:
-            #     print(post.__str__())
-            text = group['text']
-            # сохраненные посты добавляем в рейтинг слов
-            text2rate(text, buffRate)
+        post_list = [post['text'] for post in post_list]
 
-            # делим на кол-во слов в посте
-            for i in buffRate:
-                buffRate[i] /= len(buffRate)
+        return wordRate(post_list)
+    return {}
 
-            addRate(buffRate, wordRate)
-            buffRate = {}
+def wordRateFB(obj_id):
+    feed = FB.getFeed(obj_id)
+    col = []
 
-        # делим на количство групп, чтобы те, у кого их больше, не имели высшие оценки из-за больших соответствий слов
-        for key in wordRate:
-            wordRate[key] /= len(user_groups)
+    # у каждой группы достаем посты
+    for post in feed:
+        col.append(post['message'])
 
-        wordRate = sortRate(wordRate)
-        # сохраняем словесную характеристику
-        return topWords(wordRate, 100)
+    return wordRate(col)

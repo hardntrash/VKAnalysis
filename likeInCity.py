@@ -21,7 +21,7 @@ def counterLike(ids, post_id, mode='user'):
 
     listId = [i['id'] for i in getLikePost(ids, post_id)['items']]
 
-    cityes = {}
+    cities = {}
 
     for i in listId:
         city = getUserInfo(i)
@@ -29,11 +29,11 @@ def counterLike(ids, post_id, mode='user'):
             city = city['city']['title']
         else:
             continue
-        if city not in cityes.keys():
+        if city not in cities.keys():
             crds = coords(city).latlng
             if crds == None:
                 continue
-            cityes.update({
+            cities.update({
                 city: {
                     'like_count': 1,
                     'latitude': crds[0],
@@ -41,6 +41,6 @@ def counterLike(ids, post_id, mode='user'):
                 }
             })
         else:
-            cityes[city]['like_count'] += 1
+            cities[city]['like_count'] += 1
 
-    return cityes
+    return cities
