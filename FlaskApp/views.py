@@ -14,6 +14,10 @@ def index_view():
     form_map = MapLikesForms()
     return render_template('index.html', form_vk=form_vk, form_fb=form_fb, form_map=form_map)
 
+@app.route('/policy')
+def policy():
+    return render_template('privacyPolicy.html')
+
 @app.route('/vk_result', methods=['POST'])
 def vk_result_view():
     vk_id = request.form['vk_id']
