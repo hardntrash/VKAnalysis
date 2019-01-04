@@ -195,10 +195,7 @@ def wordRateVK(user_id):
 
 def wordRateFB(obj_id):
     feed = FB.getFeed(obj_id)
-    col = []
 
     # у каждой группы достаем посты
-    for post in feed:
-        col.append(post['message'])
-
+    col = [post['message'] for post in feed]
     return wordRate(col)
