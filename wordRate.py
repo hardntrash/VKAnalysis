@@ -197,5 +197,5 @@ def wordRateFB(obj_id):
     feed = FB.getFeed(obj_id)
 
     # у каждой группы достаем посты
-    col = [post['message'] for post in feed]
+    col = [post['message'] for post in feed if 'message' in post]
     return wordRate(col)
